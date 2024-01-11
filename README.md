@@ -34,6 +34,10 @@ For example, when using the STM32L071KBTx MCU:
 stm32l0xx-hal = { version = "0.10.0", features = ["mcu-STM32L071KBTx", "rt"] }
 ```
 
+## Requirements
+
+This project is compatible with Rust versions 1.62.0 to 1.73.0.
+
 
 # Supported Configurations
 
