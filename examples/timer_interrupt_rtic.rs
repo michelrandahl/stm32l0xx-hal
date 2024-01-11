@@ -30,8 +30,10 @@ mod app {
         // in the RCC register.
         let gpioa = device.GPIOA.split(&mut rcc);
 
-        // Configure PA1 as output.
+        #[cfg(feature = "stm32l0x1")]
         let led = gpioa.pa1.into_push_pull_output().downgrade();
+        #[cfg(any(feature = "stm32l0x2", feature = "stm32l0x3"))]
+        let led = gpioa.pa5.into_push_pull_output().downgrade();
 
         // Configure the timer.
         let mut timer = device.TIM2.timer(1u32.Hz(), &mut rcc);

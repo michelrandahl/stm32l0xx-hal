@@ -18,7 +18,11 @@ use stm32l0xx_hal::{
     timer::Timer,
 };
 
+#[cfg(feature = "stm32l0x1")]
 static LED: Mutex<RefCell<Option<gpioa::PA1<Output<PushPull>>>>> = Mutex::new(RefCell::new(None));
+#[cfg(any(feature = "stm32l0x2", feature = "stm32l0x3"))]
+static LED: Mutex<RefCell<Option<gpioa::PA5<Output<PushPull>>>>> = Mutex::new(RefCell::new(None));
+
 static TIMER: Mutex<RefCell<Option<Timer<pac::TIM2>>>> = Mutex::new(RefCell::new(None));
 
 #[entry]
@@ -32,8 +36,10 @@ fn main() -> ! {
     // the RCC register.
     let gpioa = dp.GPIOA.split(&mut rcc);
 
-    // Configure PA1 as output.
+    #[cfg(feature = "stm32l0x1")]
     let led = gpioa.pa1.into_push_pull_output();
+    #[cfg(any(feature = "stm32l0x2", feature = "stm32l0x3"))]
+    let led = gpioa.pa5.into_push_pull_output();
 
     // Configure the timer.
     let mut timer = dp.TIM2.timer(1.Hz(), &mut rcc);

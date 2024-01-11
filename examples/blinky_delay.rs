@@ -18,8 +18,10 @@ fn main() -> ! {
     // the RCC register.
     let gpioa = dp.GPIOA.split(&mut rcc);
 
-    // Configure PA1 as output.
+    #[cfg(feature = "stm32l0x1")]
     let mut led = gpioa.pa1.into_push_pull_output();
+    #[cfg(any(feature = "stm32l0x2", feature = "stm32l0x3"))]
+    let mut led = gpioa.pa5.into_push_pull_output();
 
     // Get the delay provider.
     let mut delay = cp.SYST.delay(rcc.clocks);
