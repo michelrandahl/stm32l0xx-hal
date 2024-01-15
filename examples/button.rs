@@ -15,27 +15,39 @@ fn main() -> ! {
     // Configure the clock.
     let mut rcc = dp.RCC.freeze(Config::hsi16());
 
-    // Acquire the GPI0A and GPIOB peripherals. This also enables the clock for
-    // GPIOA and GPIOB in the RCC register.
+    // Acquire the GPI0A, GPIOB and GPIOC peripherals. This also enables the clock for
+    // GPIOA, GPIOB and GPIOC in the RCC register.
     let gpioa = dp.GPIOA.split(&mut rcc);
-    let gpiob = dp.GPIOB.split(&mut rcc);
+    #[cfg(feature = "stm32l0x3")]
+    let gpioc = dp.GPIOC.split(&mut rcc);
 
-    // Configure PA0 as input.
+    #[cfg(not(feature = "stm32l0x3"))]
     let button = gpioa.pa0.into_pull_up_input();
+    #[cfg(feature = "stm32l0x3")]
+    let button = gpioc.pc13.into_pull_down_input();
 
-    // Configure PB6 as output.
-    let mut led = gpiob.pb6.into_push_pull_output();
+    #[cfg(feature = "stm32l0x1")]
+    let mut led = gpioa.pa1.into_push_pull_output();
+    #[cfg(any(feature = "stm32l0x2", feature = "stm32l0x3"))]
+    let mut led = gpioa.pa5.into_push_pull_output();
 
     // Get the delay provider.
     let mut delay = cp.SYST.delay(rcc.clocks);
 
+    let debounce_duration = 50_u32;
+
     loop {
-        let wait = match button.is_high() {
-            Ok(true) => 300.milliseconds(),
-            Ok(false) => 100.milliseconds(),
-            _ => unreachable!(),
-        };
-        delay.delay(wait);
-        led.toggle().unwrap();
+        if button.is_low().unwrap() {
+            // Wait for debounce duration.
+            delay.delay_ms(debounce_duration);
+
+            // Check if button is still pressed.
+            if button.is_low().unwrap() {
+                led.toggle().unwrap();
+
+                // Wait until button is released to avoid repeated toggling.
+                while button.is_low().unwrap() {}
+            }
+        }
     }
 }

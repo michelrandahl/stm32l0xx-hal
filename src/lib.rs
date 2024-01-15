@@ -63,6 +63,8 @@ pub mod signature;
 pub mod spi;
 pub mod syscfg;
 pub mod timer;
+#[cfg(feature = "io-STM32L071")]
+pub mod tsc;
 #[cfg(all(
     feature = "stm32-usbd",
     any(feature = "stm32l0x2", feature = "stm32l0x3")

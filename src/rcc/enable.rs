@@ -115,6 +115,7 @@ bus! {
     DMA1 => (AHB, dmaen, dmasmen, dmarst), // 0
     FLASH => (AHB, mifen, mifsmen, mifrst), // 8
     CRC => (AHB, crcen, crcsmen, crcrst), // 12
+    //TSC => (AHB, tscen, tscsmen, tscrst), // 16
     AES => (AHB, crypen, crypsmen, cryprst), // 24
 
     TIM2 => (APB1, tim2en, tim2smen, tim2rst), // 0
