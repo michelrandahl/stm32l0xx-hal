@@ -418,3 +418,38 @@ required-features = ["rt", "stm32l0x2", "stm32-usbd"]
 [[example]]
 name = "temperature"
 required-features = ["rt", "stm32l0x2",]
+
+[[example]]
+name = "blinky_l0x3"
+path = "examples/l0x3/blinky.rs"
+required-features = ["stm32l0x3"]
+
+[[example]]
+name = "blinky_delay_l0x3"
+path = "examples/l0x3/blinky_delay.rs"
+required-features = ["stm32l0x3"]
+
+[[example]]
+name = "button_l0x3"
+path = "examples/l0x3/button.rs"
+required-features = ["stm32l0x3"]
+
+[[example]]
+name = "button_irq_l0x3"
+path = "examples/l0x3/button_irq.rs"
+required-features = ["stm32l0x3", "rt"]
+
+[[example]]
+name = "button_irq_rtic_l0x3"
+path = "examples/l0x3/button_irq_rtic.rs"
+required-features = ["stm32l0x3", "rt"]
+
+[[example]]
+name = "timer_l0x3"
+path = "examples/l0x3/timer.rs"
+required-features = ["stm32l0x3", "rt"]
+
+[[example]]
+name = "timer_interrupt_rtic_l0x3"
+path = "examples/l0x3/timer.rs"
+required-features = ["stm32l0x3", "rt"]
